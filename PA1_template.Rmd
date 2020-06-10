@@ -19,31 +19,30 @@ summary(activity)
 ## 2) Total number of steps taken per day
 ```{r}
 total_steps_day <- tapply(activity$steps,activity$date,sum)
-hist(total_steps_day [!is.na(total_steps_day)],breaks = 30, main = "Histogram total steps per day", xlab = "Total steps per day")
+hist(total_steps_day [!is.na(total_steps_day)],breaks = 30, main = "Histogram total steps per day", xlab = "Total steps per day",ylab = "Number of Days")
 ```
 
 ## 3) Median number of steps taken each day
 ```{r}
 
-steps_median <- tapply(activity$steps,activity$date,median)
-steps_median[!is.na(steps_median)]
+steps_median <- median(tapply(activity$steps,activity$date,sum,na.rm = TRUE))
+steps_median
 
 ```
 The median is 0 steps for all measured days, because it is the most frequent result. This result is also reasonable considering that the average person ussually walks for short periods of time. 
 
 ## Mean number of steps taken each day
 ```{r}
-steps_mean <- tapply(activity$steps,activity$date,mean, na.rm = TRUE)
-steps_mean[!is.na(steps_mean)]
+steps_mean <- mean(tapply(activity$steps,activity$date,sum, na.rm = TRUE))
+steps_mean
 
 
 ```
 
-## 4)Time series of average number of steps taken
+## 4)Time series plot of average number of steps taken
 ```{r}
-
-df_steps_mean <- data.frame( Date = as.Date(names(steps_mean)), Mean = as.vector(steps_mean))
-plot(df_steps_mean$Date[!is.na(steps_mean)],df_steps_mean$Mean[!is.na(steps_mean)], main = "Time series plot of the mean number of steps taken", ylab = "Mean", xlab = "Date",type = "l")
+interval_mean <- tapply(activity$steps,activity$interval,mean, na.rm = TRUE)
+plot(as.integer(names(interval_mean)),interval_mean, main = "Time series plot of the mean number of steps taken", ylab = "Mean", xlab = "Minutes",type = "l")
 
 ```
 ## 5) 5-minute interval with the maximum number of steps
@@ -106,14 +105,14 @@ New median:
 
 ```{r}
 
-steps_median1 <- tapply(activity1$steps,activity1$date,median)
+steps_median1 <- median(tapply(activity1$steps,activity1$date,sum))
 steps_median1
 ```
 
 New mean: 
 
 ```{r}
-steps_mean1 <- tapply(activity1$steps,activity1$date,mean, na.rm = TRUE)
+steps_mean1 <- mean(tapply(activity1$steps,activity1$date,sum))
 steps_mean1
 ```
 
@@ -132,3 +131,4 @@ plot( as.integer(names(tapply(activity_weekday$steps,activity_weekday$interval,m
 
 plot( as.integer(names(tapply(activity_weekend$steps,activity_weekend$interval,mean))),tapply(activity_weekend$steps,activity_weekend$interval,mean), type = "l",xlab = "Interval", ylab= "Number of steps")
 ```
+
